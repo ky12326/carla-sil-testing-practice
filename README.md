@@ -27,7 +27,10 @@ R01 基线运行（不改任何代码，只观察）
 ### 阶段二：官方工具链的学习 —— `02-industry-toolchain/`
 
 搭建 CARLA 官方 ScenarioRunner + Leaderboard，阅读源码理解 OpenSCENARIO
-场景描述格式与 Driving Score 评测逻辑，并写了一个跟车安全性测试脚本。
+场景描述格式与 Driving Score 评测逻辑，写了一个跟车安全性测试脚本，
+并在官方 Town03 路线上跑通了一次完整的 Leaderboard 评测
+（Driving Score **11.59**），与自建指标做了方法论层面的对照
+（见 [`docs/benchmark-comparison.md`](02-industry-toolchain/docs/benchmark-comparison.md)）。
 
 ---
 
@@ -189,8 +192,9 @@ python 02-industry-toolchain/follow_vehicle_test.py
 
 ## 后续可做
 
+- 跑完官方 devtest 的全部 4 条路线（当前只跑了 Town03 那条）
 - 用 ScenarioRunner 承载同一组跟车场景，与裸 API 版本的结论对照
-- 跑通一次完整的 Leaderboard 评测（需一个能接管 hero 的 Agent）
+- 给跟车测试脚本加结果落盘（当前只打印到终端）
 - 扩充场景矩阵：天气预设与其他地图的组合
 - 改用 CARLA 同步模式（`world.tick()` 显式推进），使逐帧数据也完全确定
 

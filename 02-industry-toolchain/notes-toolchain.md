@@ -5,9 +5,14 @@
 > 本文记录我在自建测试框架（见 [`../01-self-built-harness/`](../01-self-built-harness/)）之后，
 > 转向 CARLA 官方工具链的学习过程：搭建、跑通、读源码。
 >
-> **范围说明**：这一阶段以「理解工具链」为主，产出一个跟车测试脚本（见 §4）。
-> 没有做「自建指标 vs Driving Score」的对标实验 —— 那需要两侧跑同一批场景并对照评分，
-> 本次未完成。本文不声称做过。
+> **范围说明**：这一阶段以「理解工具链」为主，产出一个跟车测试脚本（见 §4），
+> 并跑通了一次完整的 Leaderboard 评测。
+>
+> 评测结果与两套评测体系的对照分析见
+> [`docs/benchmark-comparison.md`](docs/benchmark-comparison.md) ——
+> **注意那份对照是「方法论对照」，不是数值对标**：自建框架测多机器人协同避障，
+> Leaderboard 测单车在开放路网上的合规驾驶，两者的场景与 Agent 都不同。
+> 要做到数值可比，需要把两边的场景语汇对齐，本次未做。
 
 ---
 
@@ -175,9 +180,15 @@ Leaderboard 扩展了 ScenarioRunner 的判定能力，每个检测器是一个�
    这是把「写过脚本」变成「有可复核结论」的最小改动。
 2. **用 ScenarioRunner 跑同一组场景** —— 让跟车场景变成 `.xosc`，
    由官方引擎执行，再与裸 API 版本的结论对照。这一步做了才谈得上「对标」。
-3. **跑一次完整的 Leaderboard 评测** —— 需要一个合规的 Agent 接管 hero，
-   对路线完成率与 Driving Score 做端到端验证。当时只启动了 evaluator 就停住了
-   （`simulation_results.json` 停在 `progress: [0,4]`、`records: []`），未完成。
+3. ~~**跑一次完整的 Leaderboard 评测**~~ —— ✅ **已于 2026-09-15 完成**。
+   用官方的 `npc_agent.py`（CARLA 自带 `BasicAgent`，无需机器学习模型）
+   在 Town03 官方路线上跑通，拿到真实的 Driving Score。
+   结果与对照分析见 [`docs/benchmark-comparison.md`](docs/benchmark-comparison.md)，
+   复现脚本见 [`scripts/run_leaderboard_eval.sh`](scripts/run_leaderboard_eval.sh)。
+
+   > 当时卡住的原因已查明：**用错了 Python 解释器**（conda 的 3.10 会让
+   > CARLA 0.9.11 的 py3.7 egg 段错误）。用 Python 3.8 即可。
+   > 详见 `scripts/run_leaderboard_eval.sh` 顶部的踩坑注释。
 
 ---
 
