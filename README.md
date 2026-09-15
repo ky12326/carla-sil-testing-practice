@@ -152,16 +152,25 @@ python 02-industry-toolchain/follow_vehicle_test.py
 
 ## 数据与结果
 
-`01-self-built-harness/outputs/data/` 下有三组运行的完整数据（CSV + JSON 摘要）：
+`01-self-built-harness/outputs/data/` 下有五组运行的完整数据（CSV + JSON 摘要）：
 
 | 运行 | 场景 | 结果 | 耗时 |
 |---|---|---|---|
 | `20260810_214906` | 静态障碍物 | PASS | 达到 30 s 上限 |
 | `20260810_215036` | 动态障碍物 | **FAIL**（3 次碰撞） | 14.2 s |
 | `20260810_215153` | 动态障碍物 | PASS | 35.0 s |
+| `20260915_130415` | 静态障碍物 | FAIL（3 次碰撞） | 26.9 s |
+| `20260915_130503` | 静态障碍物 | FAIL（3 次碰撞） | 27.4 s |
 
-> 两次动态运行结果不同，**不是代码变化，而是场景随机性**（当时无随机种子）——
-> 这正是 FIND-003 要解决的问题，对应的修复见对比报告末节。
+> 前两次动态运行结果不同，**不是代码变化，而是场景随机性**（当时无随机种子）——
+> 这正是 FIND-003 要解决的问题。后两组是固定种子后的重跑，落点一致。
+
+**指标修复的实测对比**（详见[对比报告末节](01-self-built-harness/outputs/reports/BASELINE_R01_vs_R02.md)）：
+
+| 指标 | 修复前 | 修复后 |
+|---|---|---|
+| `lane_invasion_events`（静态场景） | **1410** / 1619 ticks | **9** / 1225 ticks |
+| 生成点可复现性 | 3 次试验选中索引 12 / 140 / 125 | 3 次试验均选中索引 57 |
 
 **重构前后对比**（详见 [`outputs/reports/BASELINE_R01_vs_R02.md`](01-self-built-harness/outputs/reports/BASELINE_R01_vs_R02.md)）：
 
@@ -183,7 +192,7 @@ python 02-industry-toolchain/follow_vehicle_test.py
 - 用 ScenarioRunner 承载同一组跟车场景，与裸 API 版本的结论对照
 - 跑通一次完整的 Leaderboard 评测（需一个能接管 hero 的 Agent）
 - 扩充场景矩阵：天气预设与其他地图的组合
-- 重跑场景，验证车道入侵指标修复与随机种子固定后的效果
+- 改用 CARLA 同步模式（`world.tick()` 显式推进），使逐帧数据也完全确定
 
 ---
 

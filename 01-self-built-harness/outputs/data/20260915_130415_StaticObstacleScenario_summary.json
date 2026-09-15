@@ -1,0 +1,72 @@
+{
+  "scenario": "StaticObstacleScenario",
+  "session_id": "20260915_130415",
+  "start_time": "2026-09-15T13:04:15.006419",
+  "end_time": "2026-09-15T13:04:44.332876",
+  "total_ticks": 1225,
+  "result": "FAIL",
+  "scenario_type": "static",
+  "config": {
+    "num_obstacles": 3,
+    "distance": 30.0,
+    "spacing": 15.0,
+    "lateral_offsets": [
+      0,
+      -3.5,
+      3.5
+    ]
+  },
+  "result_reason": "3 次碰撞",
+  "elapsed_seconds": 26.902715921401978,
+  "statistics": {
+    "max_speed_ms": 4.81,
+    "min_speed_ms": 0.0,
+    "avg_speed_ms": 1.1646204081632614,
+    "collision_events": 3,
+    "lane_invasion_events": 9,
+    "avoidance_ticks": 505,
+    "avoidance_ratio": 0.4122448979591837
+  },
+  "events": [
+    {
+      "type": "avoidance_start",
+      "timestamp": 4.993834495544434,
+      "detail": "speed=2.5m/s"
+    },
+    {
+      "type": "avoidance_complete",
+      "timestamp": 6.168312311172485,
+      "detail": "target_lane=2, count=1"
+    },
+    {
+      "type": "avoidance_start",
+      "timestamp": 11.421030759811401,
+      "detail": "speed=0.0m/s"
+    },
+    {
+      "type": "avoidance_complete",
+      "timestamp": 14.042500972747803,
+      "detail": "target_lane=3, count=2"
+    },
+    {
+      "type": "avoidance_start",
+      "timestamp": 19.518487215042114,
+      "detail": "speed=0.0m/s"
+    },
+    {
+      "type": "collision",
+      "timestamp": 20.882888078689575,
+      "detail": ""
+    },
+    {
+      "type": "collision",
+      "timestamp": 23.900529384613037,
+      "detail": ""
+    },
+    {
+      "type": "collision",
+      "timestamp": 26.90314817428589,
+      "detail": ""
+    }
+  ]
+}
