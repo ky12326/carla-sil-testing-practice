@@ -1,0 +1,75 @@
+{
+  "scenario": "DynamicObstacleScenario",
+  "session_id": "20260810_215153",
+  "start_time": "2026-08-10T21:51:53.459704",
+  "end_time": "2026-08-10T21:52:34.866168",
+  "total_ticks": 1535,
+  "result": "PASS",
+  "scenario_type": "dynamic",
+  "config": {
+    "num_obstacles": 2,
+    "distance": 20.0,
+    "spacing": 10.0,
+    "speeds": [
+      0.15,
+      0.25
+    ],
+    "lateral_offsets": [
+      0,
+      -3.5
+    ]
+  },
+  "result_reason": "",
+  "elapsed_seconds": 34.98566126823425,
+  "statistics": {
+    "max_speed_ms": 4.89,
+    "min_speed_ms": 0.0,
+    "avg_speed_ms": 2.1755244299674192,
+    "collision_events": 0,
+    "lane_invasion_events": 1205,
+    "avoidance_ticks": 298,
+    "avoidance_ratio": 0.19413680781758957
+  },
+  "events": [
+    {
+      "type": "avoidance_start",
+      "timestamp": 6.60512638092041,
+      "detail": "speed=0.0m/s"
+    },
+    {
+      "type": "avoidance_complete",
+      "timestamp": 8.866262197494507,
+      "detail": "target_lane=2, count=1"
+    },
+    {
+      "type": "avoidance_start",
+      "timestamp": 16.06063461303711,
+      "detail": "speed=2.5m/s"
+    },
+    {
+      "type": "avoidance_complete",
+      "timestamp": 17.099802017211914,
+      "detail": "target_lane=3, count=2"
+    },
+    {
+      "type": "avoidance_start",
+      "timestamp": 22.279046297073364,
+      "detail": "speed=0.0m/s"
+    },
+    {
+      "type": "avoidance_complete",
+      "timestamp": 24.610042095184326,
+      "detail": "target_lane=2, count=3"
+    },
+    {
+      "type": "avoidance_start",
+      "timestamp": 29.77311372756958,
+      "detail": "speed=0.0m/s"
+    },
+    {
+      "type": "avoidance_complete",
+      "timestamp": 31.081096649169922,
+      "detail": "target_lane=3, count=4"
+    }
+  ]
+}

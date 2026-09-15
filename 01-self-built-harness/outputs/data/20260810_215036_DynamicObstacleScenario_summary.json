@@ -1,0 +1,50 @@
+{
+  "scenario": "DynamicObstacleScenario",
+  "session_id": "20260810_215036",
+  "start_time": "2026-08-10T21:50:36.445778",
+  "end_time": "2026-08-10T21:50:57.065231",
+  "total_ticks": 654,
+  "result": "FAIL",
+  "scenario_type": "dynamic",
+  "config": {
+    "num_obstacles": 2,
+    "distance": 20.0,
+    "spacing": 10.0,
+    "speeds": [
+      0.15,
+      0.25
+    ],
+    "lateral_offsets": [
+      0,
+      -3.5
+    ]
+  },
+  "result_reason": "3 次碰撞",
+  "elapsed_seconds": 14.226658344268799,
+  "statistics": {
+    "max_speed_ms": 4.18,
+    "min_speed_ms": 0.0,
+    "avg_speed_ms": 0.3131957186544342,
+    "collision_events": 3,
+    "lane_invasion_events": 0,
+    "avoidance_ticks": 0,
+    "avoidance_ratio": 0.0
+  },
+  "events": [
+    {
+      "type": "collision",
+      "timestamp": 8.234206676483154,
+      "detail": ""
+    },
+    {
+      "type": "collision",
+      "timestamp": 11.232898712158203,
+      "detail": ""
+    },
+    {
+      "type": "collision",
+      "timestamp": 14.227394342422485,
+      "detail": ""
+    }
+  ]
+}

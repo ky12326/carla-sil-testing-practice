@@ -1,0 +1,52 @@
+{
+  "scenario": "StaticObstacleScenario",
+  "session_id": "20260810_214906",
+  "start_time": "2026-08-10T21:49:06.794040",
+  "end_time": "2026-08-10T21:49:48.221042",
+  "total_ticks": 1619,
+  "result": "PASS",
+  "scenario_type": "static",
+  "config": {
+    "num_obstacles": 3,
+    "distance": 30.0,
+    "spacing": 15.0,
+    "lateral_offsets": [
+      0,
+      -3.5,
+      3.5
+    ]
+  },
+  "result_reason": "",
+  "elapsed_seconds": 34.98208403587341,
+  "statistics": {
+    "max_speed_ms": 4.93,
+    "min_speed_ms": 0.0,
+    "avg_speed_ms": 4.130210006176604,
+    "collision_events": 0,
+    "lane_invasion_events": 1410,
+    "avoidance_ticks": 141,
+    "avoidance_ratio": 0.08709079678814083
+  },
+  "events": [
+    {
+      "type": "avoidance_start",
+      "timestamp": 4.1847922801971436,
+      "detail": "speed=2.4m/s"
+    },
+    {
+      "type": "avoidance_complete",
+      "timestamp": 5.3607635498046875,
+      "detail": "target_lane=4, count=1"
+    },
+    {
+      "type": "avoidance_start",
+      "timestamp": 11.548375129699707,
+      "detail": "speed=0.0m/s"
+    },
+    {
+      "type": "avoidance_complete",
+      "timestamp": 13.574183464050293,
+      "detail": "target_lane=5, count=2"
+    }
+  ]
+}
