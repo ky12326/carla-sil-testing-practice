@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# 打包 / 安装
+*.egg
+*.egg-info/
+build/
+dist/
+
+# 测试与覆盖率产物
+.coverage
+coverage.xml
+htmlcov/
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+
+# CARLA 运行时产物
+# car.png 由上游 camera.py 的 cv2.imwrite 写出，与测试无关
+car.png
+outputs/logs/
+
+# 本地环境配置
+.env
+*.local

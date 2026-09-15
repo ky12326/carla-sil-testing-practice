@@ -1,0 +1,21 @@
+# Python 依赖（CARLA 本体不在此列，见下方说明）
+
+# 单元测试只需要这两个：
+PyYAML            # tests/conftest.py 读取 config/default.yaml
+pytest>=4.6       # 已在 pytest 4.6.9 与 8.3.5 上验证
+
+# 可选：
+pytest-cov        # 生成覆盖率报告：pytest --cov=src
+
+# ---------------------------------------------------------------------------
+# CARLA 不通过 pip 安装
+# ---------------------------------------------------------------------------
+# CARLA 的 PythonAPI 随发行版提供（carla-<版本>-py3.x-<平台>.egg 或 .whl），
+# 需从 CARLA 发行包中获取。设置环境变量即可：
+#
+#     export CARLA_EGG="/path/to/CARLA_0.9.11/PythonAPI/carla/dist/carla-0.9.11-py3.7-linux-x86_64.egg"
+#
+# 详见 README「环境准备」。不设置也不影响纯单元测试运行。
+#
+# 注：R01 基线脚本（baseline-r01/）另外需要 numpy / opencv-python / pygame，
+# 它们只在跑上游原版脚本时才用到，不属于 R02 代码的依赖。
