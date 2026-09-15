@@ -1,0 +1,87 @@
+# carla_simAvoidance 默认配置
+# SIL 仿真测试工程师学习项目
+
+# CARLA 连接
+carla:
+  host: localhost
+  port: 2000
+  timeout: 10.0
+
+# Ego 车辆
+ego_vehicle:
+  model: model3  # tesla.model3
+  spawn_index: null  # null = 随机选择生成点
+
+# Pure Pursuit 控制器
+pure_pursuit:
+  wheelbase: 2.875   # 轴距 (m)
+  max_steer_angle: 45.0  # 最大转向角 (度)
+
+# 卡死检测
+stagnation:
+  speed_threshold: 2.5   # 速度阈值 (m/s)
+  tick_threshold: 25     # 连续卡死 tick 数 (50Hz下, 25=0.5s)
+  # 原版为 5 ticks (0.1s), 过于敏感, 已修复为 25 (0.5s)
+
+# 避障行为
+avoidance:
+  throttle: 0.4          # 手动控制油门
+  target_distance_threshold: 1.0  # 到达目标点判定距离 (m)
+  # 避障完成后冷却时间。此项此前从未被读取（代码里写死为 EgoVehicle 的
+  # 类常量 5.0，与这里写的 3.0 不一致）。R02 回归数据「振荡 4 次 / 35s」
+  # 正是 5.0 产出的，故以此为准对齐配置，而不是反过来改代码。
+  cooldown_seconds: 5.0
+
+# 碰撞
+collision:
+  cooldown_seconds: 3.0  # 碰撞后冷却时间
+
+# 场景: 静态障碍物
+static_scenario:
+  num_obstacles: 3
+  distance: 30.0         # 第一个障碍物距离 (m)
+  spacing: 15.0          # 障碍物间距 (m)
+  lateral_offsets: [0, -3.5, 3.5]  # 横向偏移 (m)
+
+# 场景: 动态障碍物
+dynamic_scenario:
+  num_obstacles: 2
+  distance: 20.0
+  spacing: 10.0
+  speeds: [0.15, 0.25]   # 油门量
+  lateral_offsets: [0, -3.5]
+
+# 运行参数
+runtime:
+  max_duration: 35        # 最大运行时间 (秒)
+  tick_rate: 0.02        # 控制循环周期 (秒), 50Hz
+  # 固定随机种子。spawn_index 为 null 时会走 random.choice 选取生成点，
+  # 无种子则同一份配置每次运行落点不同 —— 此前实测同一 config 两次运行，
+  # 一次 3 次碰撞 FAIL、一次 35s PASS，结果不可复现。
+  seed: 42
+
+# 输出
+output:
+  data_dir: outputs/data
+  report_dir: outputs/reports
+  log_dir: outputs/logs
+  save_csv: true
+  save_state_history: true
+
+# 天气预设
+weather_presets:
+  ClearNoon:
+    cloudiness: 10
+    precipitation: 0
+    sun_altitude_angle: 45
+    fog_density: 10
+  WetNoon:
+    cloudiness: 80
+    precipitation: 50
+    sun_altitude_angle: 45
+    fog_density: 30
+  Night:
+    cloudiness: 10
+    precipitation: 0
+    sun_altitude_angle: -45
+    fog_density: 10
