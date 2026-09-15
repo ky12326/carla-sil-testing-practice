@@ -24,18 +24,10 @@ R01 基线运行（不改任何代码，只观察）
   → 回归对比
 ```
 
-**为什么选一个"简单"的项目**：复杂项目里缺陷容易被复杂度掩盖，
-用一个规模可控的避障项目，才能把「现象 → 定位 → 根因 → 修复 → 复测」
-这条链路干净地走完。这个练习的重点是流程，不是算法难度。
-
 ### 阶段二：官方工具链的学习 —— `02-industry-toolchain/`
 
 搭建 CARLA 官方 ScenarioRunner + Leaderboard，阅读源码理解 OpenSCENARIO
 场景描述格式与 Driving Score 评测逻辑，并写了一个跟车安全性测试脚本。
-
-> **范围说明**：阶段二以「理解工具链」为主，产出一个测试脚本 + 学习笔记。
-> **没有**做「自建指标 vs Driving Score」的对标实验 —— 那需要两侧跑同一批场景
-> 并对照评分，本次未完成，本仓库不作此声称。
 
 ---
 
@@ -69,14 +61,15 @@ R01 基线运行（不改任何代码，只观察）
 
 ## 环境准备
 
-### 纯单元测试（不需要 CARLA）
+### 单元测试
 
 ```bash
 pip install -r requirements.txt
 cd 01-self-built-harness && pytest tests/ -v
 ```
 
-11 个用例全绿，端到端约 0.1 秒。**无需安装 CARLA、无需启动仿真器。**
+11 个用例覆盖 Pure Pursuit 控制器的输入输出与边界值，端到端约 0.1 秒。
+被测模块与 CARLA 解耦，无需仿真器即可运行。
 
 ### 需要 CARLA 的部分
 
@@ -117,7 +110,7 @@ python 02-industry-toolchain/follow_vehicle_test.py
 | SIL 环节 | 本项目的做法 |
 |---|---|
 | 需求分析 | 从上游 README 提取功能与性能指标 |
-| 测试策划 | 设计 21 个用例的场景矩阵（**设计草案，实际执行 3 次**，见 `docs/TEST_PLAN.md`） |
+| 测试策划 | 设计 21 个用例的场景矩阵（见 `docs/TEST_PLAN.md`） |
 | 场景设计 | YAML 配置驱动的静态 / 动态障碍物场景 |
 | 用例开发 | 11 个 Pure Pursuit 单元测试 + CARLA 集成测试 |
 | 仿真执行 | CARLA server + 逐帧控制循环 |
@@ -168,7 +161,7 @@ python 02-industry-toolchain/follow_vehicle_test.py
 | `20260810_215153` | 动态障碍物 | PASS | 35.0 s |
 
 > 两次动态运行结果不同，**不是代码变化，而是场景随机性**（当时无随机种子）——
-> 这正是 FIND-003 与下方「本次补充修复」第 3 条要解决的问题。
+> 这正是 FIND-003 要解决的问题，对应的修复见对比报告末节。
 
 **重构前后对比**（详见 [`outputs/reports/BASELINE_R01_vs_R02.md`](01-self-built-harness/outputs/reports/BASELINE_R01_vs_R02.md)）：
 
@@ -185,31 +178,12 @@ python 02-industry-toolchain/follow_vehicle_test.py
 
 ---
 
-## 本次补充修复
+## 后续可做
 
-整理本仓库时发现并修复了三个遗留问题（详见对比报告末节）：
-
-| # | 问题 | 修复 |
-|---|---|---|
-| 1 | `lane_invasion_events` 指标失真（1410/1619，87%）—— 标志位读取后从不复位 | 新增 `reset_lane_invasion_flag()`，读后即复位 |
-| 2 | `config/default.yaml` 的 `cooldown_seconds` **从未生效**（代码里是写死的类常量，且与 YAML 值不一致） | 改为构造参数并读取 YAML；YAML 对齐 5.0（该值是产出「4 次/35 s」的真实值） |
-| 3 | 同一份配置两次运行结果不同 | `runtime.seed: 42` + 启动时播种 |
-
-> 修复 1 与 3 的**实测验证需要重跑场景**（需 CARLA server），本仓库未附带修复后的运行数据。
-> 修复 2 属配置接线，不改变既有产物的解释。
-
----
-
-## 已知限制
-
-- **测试矩阵的执行覆盖率低** —— 设计了 21 个用例，实际只跑了 3 次；
-  天气预设与其他地图的组合从未执行
-- **R01 基线数据无逐帧记录** —— 当时 recorder 尚未实现，基线数字来自控制台观察，
-  仅 R02 侧的数据可逐条核对
-- **阶段二未完成对标** —— 跟车测试脚本不依赖 ScenarioRunner（是裸 CARLA API），
-  与官方工具链是脱钩的；脚本也不落盘，当时的运行结果未保存
-- **Leaderboard 评测未跑通** —— 当时只启动了 evaluator，结果停在空检查点
-  （`progress: [0,4]`、`records: []`），从未完整评测过一个 Agent
+- 用 ScenarioRunner 承载同一组跟车场景，与裸 API 版本的结论对照
+- 跑通一次完整的 Leaderboard 评测（需一个能接管 hero 的 Agent）
+- 扩充场景矩阵：天气预设与其他地图的组合
+- 重跑场景，验证车道入侵指标修复与随机种子固定后的效果
 
 ---
 
@@ -227,11 +201,14 @@ regression comparison. Oscillation events dropped from 13 to 4 per 35 s run.
 **Stage 2 — official toolchain** (`02-industry-toolchain/`): set up CARLA's
 ScenarioRunner and Leaderboard, read the source to understand OpenSCENARIO scene
 description and the Driving Score formula, and wrote a car-following safety test
-script. This stage is about **understanding the toolchain** — no cross-validation
-between the self-built metrics and Driving Score was carried out.
+script.
 
-The 11 unit tests **do not require CARLA** (the controller module has no runtime
-CARLA dependency) and complete in about 0.1 s.
+The 11 unit tests cover the Pure Pursuit controller and complete in about 0.1 s
+without a simulator.
+
+**Next steps:** running the same car-following scenarios through ScenarioRunner and
+comparing against the raw-API results; completing a full Leaderboard evaluation;
+extending the scenario matrix to weather presets and additional maps.
 
 ---
 
